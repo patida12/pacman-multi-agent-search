@@ -186,7 +186,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
           return self.minval(gameState, agentIndex, depth, alpha, beta)[1]
 
     def maxval(self, gameState, agentIndex, depth, alpha, beta):
-        bestAction = ("max",-float("inf"))
+        bestAction = ["max",-float("inf")]
         for action in gameState.getLegalActions(agentIndex):
             nextGameState = gameState.generateSuccessor(agentIndex,action)
             nextAgentIndex = (depth + 1)%gameState.getNumAgents()
@@ -199,7 +199,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         return bestAction
 
     def minval(self, gameState, agentIndex, depth, alpha, beta):
-        bestAction = ("min",float("inf"))
+        bestAction = ["min",float("inf")]
         for action in gameState.getLegalActions(agentIndex):
             nextGameState = gameState.generateSuccessor(agentIndex,action)
             nextAgentIndex = (depth + 1)%gameState.getNumAgents()
@@ -245,13 +245,13 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
 
     def minval(self, gameState, agentIndex, depth):
         legalActions = gameState.getLegalActions(agentIndex)
-        propability = 1.0/len(legalActions)
-        averageScore = 0
+        totalScore = 0
         for legalAction in legalActions:
             nextGameState = gameState.generateSuccessor(agentIndex,legalAction)
             nextAgentIndex = (depth + 1)%gameState.getNumAgents()
             bestAction = (legalAction,self.minimax(nextGameState, nextAgentIndex,depth+1))
-            averageScore += bestAction[1] * propability
+            totalScore += bestAction[1] 
+        averageScore = 1.0*totalScore/len(legalActions)
         return (legalAction,averageScore)
 
 def betterEvaluationFunction(currentGameState):
@@ -262,11 +262,6 @@ def betterEvaluationFunction(currentGameState):
       DESCRIPTION: <write something here so we know what you did>
     """
     "*** YOUR CODE HERE ***"
-    if currentGameState.isLose():
-        return -float("inf")
-    if currentGameState.isWin():
-        return float("inf")
-
     pos = currentGameState.getPacmanPosition()
     foodList = currentGameState.getFood().asList()
     ghostStates = currentGameState.getGhostStates()
